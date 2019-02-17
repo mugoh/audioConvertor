@@ -4,16 +4,23 @@
 """
 
 import click
+import os
 
 
 @click.command(context_settings={
     "ignore_unknown_options": True
 })
-@click.argument('input_files', nargs=-1,
-                type=click.Path(exists=True),
-                help="The path to file(s) to convert")
-def load_files(input_files):
-    for file in input_files:
+@click.argument('Input', nargs=-1, type=click.Path(exists=True),
+                required=True)
+@click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
+              help="Path to save converted file.\n" +
+              "Defaults to the current working directory if not specified",
+              default='.')
+def load_files(Input, output):
+    """
+        INPUT: Path to file(s) to convert\n
+    """
+    for file in os.listdir(output):
         click.echo(file)
 
 
