@@ -10,7 +10,7 @@ import os
 @click.group()
 @click.pass_context
 @click.option('--verbose', '-v', help="Increase output verbosity level")
-def main(ctx):
+def main(ctx, verbose):
     """
         audio3 is a command line tool that helps convert video files
         to audio file formats.\n
@@ -33,6 +33,18 @@ def load_files(ctx, input_directory, output):
     """
     for file in os.listdir(output):
         click.echo(file)
+
+
+@main.command('play')
+@click.option('playlist', '-p', required=True, type=click.Path(exists=True),
+              help="Folder containing audio files to be played")
+@click.pass_obj
+def load_audio(ctx, playlist):
+    """
+        Selects a track of audio files and loads them up
+        in a music player.
+    """
+    playlist = os.listdir(playlist)
 
 
 if __name__ == '__main__':
