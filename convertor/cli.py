@@ -10,13 +10,13 @@ import os
 @click.command(context_settings={
     "ignore_unknown_options": True
 })
-@click.argument('Input', nargs=-1, type=click.Path(exists=True),
+@click.argument('_input', nargs=-1, type=click.Path(exists=True),
                 required=True)
 @click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
               help="Path to save converted file.\n" +
               "Defaults to the current working directory if not specified",
               default='.')
-def load_files(Input, output):
+def load_files(_input, output):
     """
         INPUT: Path to file(s) to convert\n
     """
