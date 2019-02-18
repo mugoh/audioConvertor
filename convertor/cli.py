@@ -42,7 +42,7 @@ def main(ctx, input_directory, output, bitrate, verbose):
 
 
 @main.command('convert')
-@click.pass_obj
+@click.pass_context
 def load_files(ctx):
     """
         :   Convert video file input to audio.
@@ -55,7 +55,7 @@ def load_files(ctx):
 @main.command('play')
 @click.option('playlist', '-p', required=True, type=click.Path(exists=True),
               help="Folder containing audio files to be played")
-@click.pass_obj
+@click.pass_context
 def load_audio(ctx, playlist):
     """
         :   Selects a track of audio files and loads them up
