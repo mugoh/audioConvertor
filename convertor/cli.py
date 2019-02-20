@@ -6,8 +6,9 @@
 import click
 import os
 
+from .convertor import Convertor
 
-@click.group()
+"""
 @click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
               required=True, help="Directory to get files to convert")
 @click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
@@ -16,19 +17,21 @@ import os
               default='.')
 @click.option('--bitrate', '-b', type=int,
               help="Audio bitrate specification in kbps e.g 192")
+"""
+
+
+@click.group()
 @click.option('--verbose', '-v', help="Increase output verbosity level")
 @click.pass_context
-def main(ctx, input_directory, output, bitrate, verbose):
+def main(ctx, verbose):
     """
         audio3 is a command line tool that helps convert video files
         to audio file formats.\n
          example: audio3 convert -i input/file/path -o output/path
     """
-    ctx.obj = input_directory
-    ctx.obj = output
 
 
-"""@main.command('convert')
+@main.command('convert')
 @click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
               required=True, help="Directory to get files to convert")
 @click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
@@ -36,20 +39,40 @@ def main(ctx, input_directory, output, bitrate, verbose):
               "Defaults to the current working directory if not specified",
               default='.')
 @click.option('--bitrate', '-b', type=int,
-              help="Audio bitrate specification in kbps e.g 192")
-@click.pass_obj
-"""
-
-
-@main.command('convert')
+              help="Audio bitrate specification in kbps e.g 192.\n" +
+              "Default beatrate is 320k")
+@click.option('--recursive', '-r', is_flag=True,
+              help="Load files from a directory")
 @click.pass_context
-def load_files(ctx):
+def load_files(ctx, input_directory, output, bitrate='320k', recursive):
     """
         :   Convert video file input to audio.
     """
-    output = ctx.obj
-    for file in os.listdir(output):
-        click.echo(file)
+
+    if os.path.isfile(input_directory):
+        convertor_instance.to_audio(input_directory, output, bitrate)
+
+    if recursive:
+        try:
+            os.path.listdir(input_directory)
+        except FileNotFoundError as er:
+            click.echo(input_directory,
+                       " is a directory. Try again with --recursive")
+
+    if not recursive and os.path.isdir(input_directory):
+        try:
+            all_files = os.listdir(input_directory)
+
+        except FileNotFoundError as e:
+            click.echo(input_directory,
+                       " is a not directory. UnSpecify --recursive")
+        else:
+            video_files = [[file_ for file_ in files if is_video(file_)]
+                           for root, dirs, files
+                           in os.walk(input_directory)]
+            click.echo("Found ", video_files.length())
+        finally:
+            pass
 
 
 @main.command('play')
@@ -63,6 +86,8 @@ def load_audio(ctx, playlist):
     """
     playlist = os.listdir(playlist)
 
+
+convertor_instance = Convertor()
 
 if __name__ == '__main__':
     main()
