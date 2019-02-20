@@ -1,10 +1,10 @@
 """
     This module holds the class that makes
-    subprocess calls to ffmeg with the received
+    subprocess calls to ffmpeg with the received
     CLI commands.
 """
 import subprocess
-import shutil
+import os
 
 
 class Convertor:
@@ -12,15 +12,22 @@ class Convertor:
         Makes calls to subprocesses with arguments
         and commands received from the CLI.
     """
-    def __init__():
+
+    def to_audio(self, _in, _out, bitrate='320k'):
         """
-            Checks for presence of ffmpeg on program start
-            in urs/bin and prompts for installation.
+            Converts input file to audio format
+        """
+        _out = self.get_name_from_path(_out)
+        commands = ['ffmpeg', '-i', '_in',
+                    '-vn', '-ar', '44100',
+                    '-ac 2', '-ab',
+                    bitrate, _out + '.mp3']
+        subprocess.Popen(commands)
+
+    def get_name_from_path(self, file_path):
+        """
+            Extracts file name from absolute file path.
         """
 
-        if not shutil.which('ffmpeg'):
-            install_prompt = input(
-                "Need to get ffmpeg for you. Continue?[y/N] ")
-            accepted_res = ['y',  'n']
-            while install_prompt.lower()[0] not in accepted_res:
-                install_prompt = input()
+        head, tail = os.path.split(file_path)
+        return tail or os.path.basename(head)
