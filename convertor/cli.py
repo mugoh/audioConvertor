@@ -8,17 +8,6 @@ import os
 
 from .convertor import Convertor
 
-"""
-@click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
-              required=True, help="Directory to get files to convert")
-@click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
-              help="Path to save converted file.\n" +
-              "Defaults to the current working directory if not specified",
-              default='.')
-@click.option('--bitrate', '-b', type=int,
-              help="Audio bitrate specification in kbps e.g 192")
-"""
-
 
 @click.group()
 @click.option('--verbose', '-v', help="Increase output verbosity level")
@@ -67,10 +56,16 @@ def load_files(ctx, input_directory, output, bitrate='320k', recursive):
             click.echo(input_directory,
                        " is a not directory. UnSpecify --recursive")
         else:
-            video_files = [[file_ for file_ in files if is_video(file_)]
+            video_files = [[file_ for file_ in files
+                            if convertor_instance.is_video(file_)]
                            for root, dirs, files
                            in os.walk(input_directory)]
             click.echo("Found ", video_files.length())
+            click.echo(convertor_instance.show_process_message())
+            convertor_instance.convert_multiple(video_files,
+                                                output,
+                                                bitrate
+                                                )
         finally:
             pass
 
