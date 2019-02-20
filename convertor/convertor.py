@@ -5,6 +5,7 @@
 """
 import subprocess
 import os
+import platform
 
 
 class Convertor:
@@ -56,3 +57,37 @@ class Convertor:
 
         for video in video_files:
             self.to_audio(video, out, brate)
+
+    def load_player(self, playitems, preferred_player):
+        """
+            Opens up audio files in user audio player.
+        """
+        current_platform = platform.system()
+
+        if preferred_player:
+            try:
+                self.openPlayer(preferred_player, playitems)
+            except Exception as e:
+                return f"Player {preferred_player} missing. "+
+                "Try installing it"+
+                " or use something different."
+            else:
+                pass
+            finally:
+                pass
+
+        if current_platform == 'Linux':
+            self.openPlayer('xdg-open', playitems)
+        elif current_platform == 'Darwin':
+            self.openPlayer('open', playitems)
+        elif current_platform == 'Windows':
+            self.openPlayer('', playitems)
+
+    def open_player(self, cmd, play_items):
+        """
+            Opens user auio player epending on present
+            system architecture.
+        """
+        commands = [cmd]
+        subprocess.Popen(commands + play_items,
+                         shell=True)

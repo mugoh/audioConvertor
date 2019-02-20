@@ -73,13 +73,32 @@ def load_files(ctx, input_directory, output, bitrate='320k', recursive):
 @main.command('play')
 @click.option('playlist', '-p', required=True, type=click.Path(exists=True),
               help="Folder containing audio files to be played")
+@click.option('--recursive', '-r', is_flag=True,
+              help="Load files from a directory")
+@click.option('--player', '-e',
+              help="Preferred audio player to open audio files")
 @click.pass_context
-def load_audio(ctx, playlist):
+def load_audio(ctx, playlist, recursive, player):
     """
         :   Selects a track of audio files and loads them up
         in a music player.
     """
-    playlist = os.listdir(playlist)
+    if recursive:
+        try:
+            full_playlist = os.listdir(playlist)
+        except FileNotFoundError as e:
+            click.echo(playlist, "is not a directory")
+        else:
+            convertor_instance.load_player(
+                full_playlist)
+            pass
+        finally:
+            pass
+
+    player_error = convertor_instance.load_player([playlist], player)
+
+    if player_error:
+        click.echo(player_error)
 
 
 convertor_instance = Convertor()
