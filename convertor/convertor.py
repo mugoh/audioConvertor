@@ -18,8 +18,11 @@ class Convertor:
         """
             Converts input file to audio format
         """
-        _out = self.get_name_from_path(_out)
-        commands = ['ffmpeg', '-i', '_in',
+
+        # Default output parameter
+        if _out:
+            _out += self.get_name_from_path(_in)
+        commands = ['ffmpeg', '-i', _in,
                     '-vn', '-ar', '44100',
                     '-ac 2', '-ab',
                     bitrate, _out + '.mp3']

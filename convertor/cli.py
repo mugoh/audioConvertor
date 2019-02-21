@@ -37,6 +37,8 @@ def load_files(ctx, input_directory, output, bitrate='320k', recursive):
     """
         :   Convert video file input to audio.
     """
+    if not os.path.isdir(output):
+        click.echo("Output specified as file name")
 
     if os.path.isfile(input_directory):
         convertor_instance.to_audio(input_directory, output, bitrate)
@@ -44,6 +46,7 @@ def load_files(ctx, input_directory, output, bitrate='320k', recursive):
     if recursive:
         try:
             os.path.listdir(input_directory)
+            os.path.listdir(output)
         except FileNotFoundError as er:
             click.echo(input_directory,
                        " is a directory. Try again with --recursive")
