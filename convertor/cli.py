@@ -39,6 +39,8 @@ def load_files(ctx, input_directory, output, bitrate='320k', recursive):
     """
     if not os.path.isdir(output):
         click.echo("Output specified as file name")
+        if recursive:
+            click.echo("\n Give ouput as a directory for --recursive")
 
     if os.path.isfile(input_directory):
         convertor_instance.to_audio(input_directory, output, bitrate)

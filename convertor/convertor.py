@@ -20,8 +20,14 @@ class Convertor:
         """
 
         # Default output parameter
-        if _out:
+        if os.path.isdir(_out):
             _out += self.get_name_from_path(_in)
+
+        elif os.path.isfile(_out):
+            base_name = os.path.basename(_out)
+            ext = os.path.splitext(base_name)[1]
+            _out = _out.replace(ext, '.mp3')
+
         commands = ['ffmpeg', '-i', _in,
                     '-vn', '-ar', '44100',
                     '-ac 2', '-ab',
