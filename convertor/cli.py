@@ -6,7 +6,7 @@
 import click
 import os
 
-from .convertor import Convertor
+from formats import Convertor
 
 
 @click.group(invoke_without_command=False)
@@ -42,10 +42,8 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
     """
-    if not os.path.isdir(output):
-        click.echo("Output specified as file name")
-
     if os.path.isfile(input_directory):
+        click.echo("Output specified as file name")
         convertor_instance.to_audio(
             input_directory, output, bitrate, file_format)
 
