@@ -9,7 +9,7 @@ import os
 from .convertor import Convertor
 
 
-@click.group()
+@click.group(invoke_without_command=False)
 @click.option('--verbose', '-v', help="Increase output verbosity level")
 @click.pass_context
 def main(ctx, verbose):
@@ -23,54 +23,54 @@ def main(ctx, verbose):
 @main.command('convert')
 @click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
               required=True, help="Directory to get files to convert")
-@click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
+@click.option('--output', '-o', nargs=1, type=click.Path(),
               help="Path to save converted file.\n" +
               "Defaults to the current working directory if not specified",
               default='.')
 @click.option('--bitrate', '-b', type=int,
               help="Audio bitrate specification in kbps e.g 192.\n" +
-              "Default beatrate is 320k")
+              "Default beatrate is 320k",
+              default='320k')
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
+@click.option('--file_format', '-f',
+              help="Output format for files in mulitple conversion. " +
+              "Specified with --recursive e.g mp3",
+              default="mp3")
 @click.pass_context
-def load_files(ctx, input_directory, output, bitrate='320k', recursive):
+def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
     """
     if not os.path.isdir(output):
         click.echo("Output specified as file name")
-        if recursive:
-            click.echo("\n Give ouput as a directory for --recursive")
 
     if os.path.isfile(input_directory):
-        convertor_instance.to_audio(input_directory, output, bitrate)
+        convertor_instance.to_audio(
+            input_directory, output, bitrate, file_format)
 
     if recursive:
         try:
-            os.path.listdir(input_directory)
-            os.path.listdir(output)
-        except FileNotFoundError as er:
-            click.echo(input_directory,
-                       " is a directory. Try again with --recursive")
-
-    if not recursive and os.path.isdir(input_directory):
-        try:
-            all_files = os.listdir(input_directory)
-
-        except FileNotFoundError as e:
-            click.echo(input_directory,
-                       " is a not directory. UnSpecify --recursive")
-        else:
+            os.listdir(input_directory)
+            os.listdir(output)
             video_files = [[file_ for file_ in files
                             if convertor_instance.is_video(file_)]
                            for root, dirs, files
                            in os.walk(input_directory)]
-            click.echo("Found ", video_files.length())
+        except NotADirectoryError as er:
+            click.echo(input_directory, 'or', output,
+                       " is a not a directory. " +
+                       " Use --recursive with directories")
+            click.echo(er)
+        else:
+            click.echo("Found ", video_files.length(), "files")
             click.echo(convertor_instance.show_process_message())
             convertor_instance.convert_multiple(video_files,
                                                 output,
-                                                bitrate
+                                                bitrate,
+                                                file_format
                                                 )
+
         finally:
             pass
 
