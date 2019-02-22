@@ -48,26 +48,40 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
     """
-    if os.path.isfile(input_directory):
+    if os.path.isfile(input_directory) and not recursive:
         click.echo("Output specified as file name")
         convertor_instance.to_audio(
             input_directory, output, bitrate, file_format)
+    if not recursive and os.path.isdir(input_directory):
+        click.echo(input_directory +
+                   " is a directory. " + "--recursive Needed for directory")
 
     if recursive:
         try:
             os.listdir(input_directory)
             os.listdir(output)
-            video_files = [[file_ for file_ in files
-                            if convertor_instance.is_video(file_)]
-                           for root, dirs, files
-                           in os.walk(input_directory)]
+
+            # for root, dirs, files in os.walk(input_directory):
+            #    click.echo(files)
+            # print([files for root, dirs, files in os.walk(input_directory)
+            # if])
+
+            nested_files = [files for root, dirs, files
+                            in os.walk(input_directory)]
+            video_files = [file_ for file_ in flatten(nested_files)
+                           if convertor_instance.is_video(file_)]
+            if not video_files:
+                click.echo("\nCould not find video format files in " +
+                           input_directory)
+                return
+
         except NotADirectoryError as er:
-            click.echo(input_directory, 'or', output,
+            click.echo(input_directory + ' or ' + output +
                        " is a not a directory. " +
                        " Use --recursive with directories")
             click.echo(er)
         else:
-            click.echo("Found ", video_files.length(), "files")
+            click.echo("Found " + str(len(video_files)) + " files")
             click.echo(convertor_instance.show_process_message())
             convertor_instance.convert_multiple(video_files,
                                                 output,
@@ -108,6 +122,15 @@ def load_audio(ctx, playlist, recursive, player):
 
     if player_error:
         click.echo(player_error)
+
+
+def flatten(iterable):
+    """
+      Extracts nested file items from path
+      to single iter.
+    """
+
+    return [item for it in iterable for item in it]
 
 
 convertor_instance = Convertor()
