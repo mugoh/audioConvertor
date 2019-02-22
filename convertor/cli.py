@@ -10,8 +10,8 @@ from formats import Convertor
 
 
 @click.group(invoke_without_command=True)
-@click.option('--verbose', '-v', help="Increase output verbosity level")
 @click.pass_context
+@click.option('--verbose', '-v', help="Increase output verbosity level")
 def main(ctx, verbose):
     group_commands = ['convert', 'play']
     """
@@ -23,16 +23,18 @@ def main(ctx, verbose):
     if ctx.invoked_subcommand is None:
         click.echo("Specify one of the commands below")
         print(*group_commands, sep='\n')
+    ctx.obj['VERBOSE'] = True
 
 
 @main.command('convert')
+@click.pass_context
 @click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
               required=True, help="Directory to get files to convert")
 @click.option('--output', '-o', nargs=1, type=click.Path(),
               help="Path to save converted file.\n" +
               "Defaults to the current working directory if not specified",
               default='.')
-@click.option('--bitrate', '-b', type=int,
+@click.option('--bitrate', '-b',
               help="Audio bitrate specification in kbps e.g 192.\n" +
               "Default beatrate is 320k",
               default='320k')
@@ -42,7 +44,6 @@ def main(ctx, verbose):
               help="Output format for files in mulitple conversion. " +
               "Specified with --recursive e.g mp3",
               default="mp3")
-@click.pass_context
 def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
@@ -79,13 +80,13 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
 
 
 @main.command('play')
+@click.pass_context
 @click.option('playlist', '-p', required=True, type=click.Path(exists=True),
               help="Folder containing audio files to be played")
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
 @click.option('--player', '-e',
               help="Preferred audio player to open audio files")
-@click.pass_context
 def load_audio(ctx, playlist, recursive, player):
     """
         :   Selects a track of audio files and loads them up
@@ -112,4 +113,4 @@ def load_audio(ctx, playlist, recursive, player):
 convertor_instance = Convertor()
 
 if __name__ == '__main__':
-    main()
+    main(obj={})
