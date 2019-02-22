@@ -14,24 +14,25 @@ class Convertor:
         and commands received from the CLI.
     """
 
-    def to_audio(self, _in, _out, bitrate='320k'):
+    def to_audio(self, _in, _out, bitrate, file_format):
         """
             Converts input file to audio format
         """
 
         # Default output parameter
         if os.path.isdir(_out):
-            _out += self.get_name_from_path(_in)
+            _out += self.get_name_from_path(_in) + '.' + file_format
 
-        elif os.path.isfile(_out):
+        """
+        else:
             base_name = os.path.basename(_out)
             ext = os.path.splitext(base_name)[1]
             _out = _out.replace(ext, '.mp3')
-
+        """
         commands = ['ffmpeg', '-i', _in,
                     '-vn', '-ar', '44100',
                     '-ac 2', '-ab',
-                    bitrate, _out + '.mp3']
+                    bitrate, _out]
         subprocess.Popen(commands)
 
     def get_name_from_path(self, file_path):
@@ -59,13 +60,13 @@ class Convertor:
 
         return "Converting"
 
-    def convert_multiple(self, video_files, out, brate):
+    def convert_multiple(self, video_files, out, brate, _format):
         """
             Converts all files specified in directory.
         """
 
         for video in video_files:
-            self.to_audio(video, out, brate)
+            self.to_audio(video, out, brate, _format)
 
     def load_player(self, playitems, preferred_player):
         """
