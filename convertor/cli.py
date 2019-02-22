@@ -9,15 +9,20 @@ import os
 from formats import Convertor
 
 
-@click.group(invoke_without_command=False)
+@click.group(invoke_without_command=True)
 @click.option('--verbose', '-v', help="Increase output verbosity level")
 @click.pass_context
 def main(ctx, verbose):
+    group_commands = ['convert', 'play']
     """
-        audio3 is a command line tool that helps convert video files
-        to audio file formats.\n
-         example: audio3 convert -i input/file/path -o output/path
-    """
+            audio3 is a command line tool that helps convert video files
+            to audio file formats.\n
+             example: audio3 convert -i input/file/path -o output/path
+        """
+
+    if ctx.invoked_subcommand is None:
+        click.echo("Specify one of the commands below")
+        print(*group_commands, sep='\n')
 
 
 @main.command('convert')

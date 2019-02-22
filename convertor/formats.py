@@ -78,9 +78,11 @@ class Convertor:
             try:
                 self.openPlayer(preferred_player, playitems)
             except Exception as e:
-                return f"Player {preferred_player} missing. "+
-                "Try installing it"+
-                " or use something different."
+                msg = f'Player {preferred_player} missing. '
+                return msg
+                + "Try installing it"
+                + " or use something different."
+
             else:
                 pass
             finally:
