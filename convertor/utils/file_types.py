@@ -18,9 +18,6 @@ def check_is_video(file_name):
                 formats if file_name.endswith(extension)])
 
 
-@click.command()
-@click.option('--choice_', type=click.Choice(['y', 'n'],
-                                             case_sensitive=False))
 def require_ffmepg():
     """
         Prompts for installation of ffmpeg from user
@@ -30,14 +27,14 @@ def require_ffmepg():
     choices = ['y', 'n']
 
     choice_ = input("Need to get ffmpeg. Continue?[y/n] ").lower().strip()[0]
-    click.echo("choice " + choice_)
 
     while choice_ not in choices:
         choice_ = input("Continue? y/n ").lower().strip()[0]
     if choice_ == 'n':
-        return
+        return False
     elif choice_ == 'y':
         get_module('ffmpeg')
+        return True
 
 
 def get_module(module):
@@ -46,4 +43,9 @@ def get_module(module):
         given parameter name.
     """
 
-    subprocess.Popen(['pip', 'install', module])
+    click.echo("\nGetting ffmpeg")
+
+    try:
+        subprocess.check_output(['pip', 'install', module])
+    except subprocess.CalledProcessError as e:
+        print("Could not get ", module, '\n', e)

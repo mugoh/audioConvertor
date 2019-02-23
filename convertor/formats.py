@@ -7,6 +7,8 @@ import subprocess
 import os
 import platform
 
+from utils.file_types import require_ffmepg, check_is_video
+
 
 class Convertor:
     """
@@ -23,6 +25,12 @@ class Convertor:
         if os.path.isdir(_out):
             _out += self.get_name_from_path(_in) + '.' + file_format
 
+        # File format unchecked for single inputs
+        if not check_is_video(_in):
+            msg = " is not a supported media type"
+            self.abort_conversion(
+                self.get_name_from_path(_in) + msg)
+
         """
         else:
             base_name = os.path.basename(_out)
@@ -31,9 +39,15 @@ class Convertor:
         """
         commands = ['ffmpeg', '-i', _in,
                     '-vn', '-ar', '44100',
-                    '-ac 2', '-ab',
+                    '-ac', '2', '-ab',
                     bitrate, _out]
-        subprocess.Popen(commands)
+        try:
+            subprocess.Popen(commands)
+        except FileNotFoundError as er:
+            res = require_ffmepg()
+
+            if not res:
+                self.abort_conversion("Dependecy not installed.")
 
     def get_name_from_path(self, file_path):
         """
@@ -103,3 +117,13 @@ class Convertor:
         commands = [cmd]
         subprocess.Popen(commands + play_items,
                          shell=True)
+
+    def abort_conversion(self, message=''):
+        """
+            Terminates app process with message.
+        """
+        exit_message = ' Aborted'
+        message += exit_message
+        print('\n', message)
+
+        os.abort()
