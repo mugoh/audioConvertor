@@ -23,8 +23,9 @@ class Convertor:
         """
 
         # Default output parameter
+        # If not current directory, append '/'
         if os.path.isdir(_out):
-            _out = '' if _out == '.' else _out
+            _out = '' if _out == '.' else _out + '/'
             _out += self.get_name_from_path(_in,
                                             replace=True) + '.' + file_format
 
