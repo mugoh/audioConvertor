@@ -6,6 +6,7 @@
 import subprocess
 import os
 import platform
+from click import echo
 
 from utils.file_types import require_ffmepg, check_is_video
 
@@ -23,7 +24,9 @@ class Convertor:
 
         # Default output parameter
         if os.path.isdir(_out):
-            _out += self.get_name_from_path(_in) + '.' + file_format
+            _out = '' if _out == '.' else _out
+            _out += self.get_name_from_path(_in,
+                                            replace=True) + '.' + file_format
 
         # File format unchecked for single inputs
         if not check_is_video(_in):
@@ -42,20 +45,38 @@ class Convertor:
                     '-ac', '2', '-ab',
                     bitrate, _out]
         try:
-            subprocess.Popen(commands)
+            self.run_convert_commands(commands)
         except FileNotFoundError as er:
             res = require_ffmepg()
 
             if not res:
                 self.abort_conversion("Dependecy not installed.")
 
-    def get_name_from_path(self, file_path):
+    def get_name_from_path(self, file_path, replace=False):
         """
             Extracts file name from absolute file path.
         """
 
+        if replace:
+            base_name = os.path.basename(file_path)
+            ext = os.path.splitext(base_name)[1]
+            _out = base_name.replace(ext, '')
+            return _out
+
         head, tail = os.path.split(file_path)
         return tail or os.path.basename(head)
+
+    def run_convert_commands(self, cmds):
+        """
+            Invokes subprocess with commands
+            required to process a user input call.
+        """
+        try:
+            subprocess.check_output(cmds)
+        except subprocess.CalledProcessError as er:
+            print("Unable to complete conversion\n", er)
+        else:
+            echo("\nConversion Complete")
 
     def is_video(self, given_file):
         """
@@ -124,6 +145,6 @@ class Convertor:
         """
         exit_message = ' Aborted'
         message += exit_message
-        print('\n', message)
+        echo('\n', message)
 
         os.abort()

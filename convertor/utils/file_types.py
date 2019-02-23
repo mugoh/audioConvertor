@@ -12,7 +12,7 @@ def check_is_video(file_name):
         Ensures passed file inputs are of recogninsed
         media format.
     """
-    formats = ['flv', 'mp4', 'avi']
+    formats = ['flv', 'mp4', 'avi', 'mp3', 'flaac']
 
     return any([extension for extension in
                 formats if file_name.endswith(extension)])
