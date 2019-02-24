@@ -103,7 +103,8 @@ class Convertor:
         """
 
         for video in video_files:
-            self.to_audio(video, out, brate, _format)
+            self.to_audio(os.path.abspath(video),
+                          out, brate, _format)
 
     def load_player(self, playitems, preferred_player):
         """

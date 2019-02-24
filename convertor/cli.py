@@ -73,20 +73,24 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
                 # files for root, dirs, files in os.walk(input_directory)
                 # if])
 
-                nested_files = [files for root, dirs, files
-                                in os.walk(input_directory)]
+                nested_files = [os.path.join(root, file_)
+                                for root, dirs, files
+                                in os.walk(input_directory)
+                                for file_ in files]
+
                 video_files = [file_ for file_ in flatten(nested_files)
                                if convertor_instance.is_video(file_)]
                 if not video_files:
                     click.echo("\nCould not find video format files in " +
-                               input_directory)
+                               input_directory,
+                               err=True)
                     return
 
             except NotADirectoryError as er:
                 click.echo(input_directory + ' or ' + output +
                            " is a not a directory. " +
                            " Use --recursive with directories")
-                click.echo(er)
+                click.echo(er, err=True)
             else:
                 click.echo("Found " + str(len(video_files)) + " files")
                 click.echo(convertor_instance.show_process_message())
@@ -97,7 +101,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
                                                     )
 
             finally:
-                pass
+                return
 
 
 @main.command('play')
@@ -136,8 +140,12 @@ def flatten(iterable):
       Extracts nested file items from path
       to single iter.
     """
+    return iterable
 
-    return [item for it in iterable for item in it]
+    # Os walk with absolute path returns
+    # non-nested
+    #
+    # return [item for it in iterable for item in it]
 
 
 convertor_instance = Convertor()
