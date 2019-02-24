@@ -150,3 +150,12 @@ class Convertor:
         echo('\n', message)
 
         os.abort()
+
+    def split_input_dirs(self, paths):
+        """
+            Gives individual input paths from
+            a tuple of input paths
+        """
+
+        for path in paths:
+            yield path
