@@ -85,7 +85,7 @@ class Convertor:
             Checks if given file has a video format based on the
             file extension.
         """
-        video_extensions = ['mp4', 'flv', 'avi']
+        video_extensions = ['mp4', 'flv', 'avi', 'mp3', 'flaac']
 
         return any([ext for ext in video_extensions
                     if given_file.endswith(ext)])
@@ -124,14 +124,14 @@ class Convertor:
             else:
                 pass
             finally:
-                pass
+                return
 
         if current_platform == 'Linux':
-            self.openPlayer('xdg-open', playitems)
+            self.open_player('xdg-open', playitems)
         elif current_platform == 'Darwin':
-            self.openPlayer('open', playitems)
+            self.open_player('open', playitems)
         elif current_platform == 'Windows':
-            self.openPlayer('', playitems)
+            self.open_player('', playitems)
 
     def open_player(self, cmd, play_items):
         """

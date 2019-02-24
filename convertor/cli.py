@@ -112,7 +112,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
               help="Folder containing audio files to be played")
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
-@click.option('--player', '-e',
+@click.option('--player', '-pl',
               help="Preferred audio player to open audio files")
 def load_audio(ctx, playlist, recursive, player):
     """
@@ -129,12 +129,15 @@ def load_audio(ctx, playlist, recursive, player):
                 full_playlist)
             pass
         finally:
-            pass
+            return
 
+    if not convertor_instance.is_video(playlist):
+        click.echo(click.style(
+            playlist + " is not a supported media type", fg='red'))
     player_error = convertor_instance.load_player([playlist], player)
 
     if player_error:
-        click.echo(player_error)
+        click.echo(player_error, err=True)
 
 
 def flatten(iterable):
