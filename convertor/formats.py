@@ -78,6 +78,7 @@ class Convertor:
             print("Unable to complete conversion\n", er)
         else:
             echo("\nConversion Complete")
+            echo("Saved: " + cmds[len(cmds) - 1])
 
     def is_video(self, given_file):
         """

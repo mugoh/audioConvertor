@@ -28,9 +28,10 @@ def main(ctx, verbose):
 
 @main.command('convert')
 @click.pass_context
-@click.option('--input_directory', '-i', nargs=1, type=click.Path(exists=True),
+@click.option('--input_directory', '-i', multiple=True,
+              type=click.Path(exists=True),
               required=True, help="Directory to get files to convert")
-@click.option('--output', '-o', nargs=1, type=click.Path(),
+@click.option('--output', '-o', nargs=1, type=click.Path(exists=True),
               help="Path to save converted file.\n" +
               "Defaults to the current working directory if not specified",
               default='.')
@@ -41,15 +42,17 @@ def main(ctx, verbose):
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
 @click.option('--file_format', '-f',
-              help="Output format for files in mulitple conversion. " +
+              help="Output format for files in multiple conversion. " +
               "Specified with --recursive e.g mp3",
               default="mp3")
 def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
     """
+    click.echo(input_directory)
+    return
     if os.path.isfile(input_directory) and not recursive:
-        click.echo("Output specified as file name")
+        click.echo("Input specified as file name")
         convertor_instance.to_audio(
             input_directory, output, bitrate, file_format)
     if not recursive and os.path.isdir(input_directory):
