@@ -9,7 +9,7 @@ import subprocess
 
 def check_is_video(file_name):
     """
-        Ensures passed file inputs are of recogninsed
+        Ensures passed file inputs are of recognized
         media format.
     """
     formats = ['flv', 'mp4', 'avi', 'mp3', 'flaac']
@@ -22,7 +22,7 @@ def require_ffmepg():
     """
         Prompts for installation of ffmpeg from user
         if missing. If user specifies 'No', the
-        convertion is terminated.
+        conversion is terminated.
     """
     choices = ['y', 'n']
 

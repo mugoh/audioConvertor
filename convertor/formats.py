@@ -92,7 +92,7 @@ class Convertor:
 
     def show_process_message(self):
         """
-            Displays convertertion process start to the user.
+            Displays conversion process start to the user.
         """
 
         return "Converting"
@@ -135,7 +135,7 @@ class Convertor:
 
     def open_player(self, cmd, play_items):
         """
-            Opens user auio player epending on present
+            Opens user audio player depending on present
             system architecture.
         """
         commands = [cmd]
