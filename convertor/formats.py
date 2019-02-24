@@ -6,7 +6,7 @@
 import subprocess
 import os
 import platform
-from click import echo
+from click import echo, style
 
 from utils.file_types import require_ffmepg, check_is_video
 
@@ -77,7 +77,7 @@ class Convertor:
         except subprocess.CalledProcessError as er:
             print("Unable to complete conversion\n", er)
         else:
-            echo("\nConversion Complete")
+            echo(style("\nConversion Complete\n", fg='green'))
             echo("Saved: " + cmds[len(cmds) - 1])
 
     def is_video(self, given_file):
@@ -148,7 +148,7 @@ class Convertor:
         """
         exit_message = ' Aborted'
         message += exit_message
-        echo('\n', message)
+        echo('\n' + message, fg='red', err=True)
 
         os.abort()
 

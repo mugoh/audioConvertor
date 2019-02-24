@@ -93,7 +93,9 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
                 click.echo(er, err=True)
             else:
                 click.echo("Found " + str(len(video_files)) + " files")
-                click.echo(convertor_instance.show_process_message())
+                click.echo(click.style(
+                    convertor_instance.show_process_message(), blink=True,
+                    fg='yellow', bold=True))
                 convertor_instance.convert_multiple(video_files,
                                                     output,
                                                     bitrate,
