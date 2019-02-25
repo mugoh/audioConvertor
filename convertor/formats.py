@@ -131,16 +131,16 @@ class Convertor:
         elif current_platform == 'Darwin':
             self.open_player('open', playitems)
         elif current_platform == 'Windows':
-            self.open_player('', playitems)
+            self.open_player(play_items=playitems)
 
-    def open_player(self, cmd, play_items):
+    def open_player(self, cmd=[], play_items=[]):
         """
             Opens user audio player depending on present
             system architecture.
         """
-        commands = [cmd]
-        subprocess.Popen(commands + play_items,
-                         shell=True)
+        commands = [cmd] + play_items
+
+        subprocess.check_call(commands)
 
     def abort_conversion(self, message=''):
         """

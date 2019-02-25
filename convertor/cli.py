@@ -140,6 +140,8 @@ def load_audio(ctx, playlist, recursive, player):
     if not convertor_instance.is_video(playlist):
         click.echo(click.style(
             playlist + " is not a supported media type", fg='red'))
+        return
+
     player_error = convertor_instance.load_player([playlist], player)
 
     if player_error:
