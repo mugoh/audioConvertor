@@ -122,9 +122,15 @@ def load_audio(ctx, playlist, recursive, player):
     if recursive:
         try:
             full_playlist = os.listdir(playlist)
+            full_playlist = [media for media in full_playlist
+                             if convertor_instance.is_video(media)]
+
         except NotADirectoryError as e:
             click.echo(playlist + " is not a directory. Unspecify recursive")
         else:
+            if not full_playlist:
+                click.echo("Could not find any media files in " + playlist)
+                return
             convertor_instance.load_player(
                 full_playlist)
             pass
