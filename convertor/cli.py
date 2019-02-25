@@ -132,7 +132,7 @@ def load_audio(ctx, playlist, recursive, player):
                 click.echo("Could not find any media files in " + playlist)
                 return
             convertor_instance.load_player(
-                full_playlist)
+                full_playlist, player)
             pass
         finally:
             return

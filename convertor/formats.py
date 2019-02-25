@@ -114,8 +114,9 @@ class Convertor:
 
         if preferred_player:
             try:
-                self.openPlayer(preferred_player, playitems)
+                self.open_player(preferred_player, playitems)
             except Exception as e:
+                print(e)
                 msg = f'Player {preferred_player} missing. '
                 return msg
                 + "Try installing it"
