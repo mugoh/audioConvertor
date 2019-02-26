@@ -110,22 +110,26 @@ class Convertor:
         """
             Opens up audio files in user audio player.
         """
+        error = False
+
         current_platform = platform.system()
 
         if preferred_player:
             try:
-                self.open_player(preferred_player, playitems)
-            except Exception as e:
-                print(e)
-                msg = f'Player {preferred_player} missing. '
-                return msg
-                + "Try installing it"
-                + " or use something different."
+                open_status = self.open_player(preferred_player, playitems)
 
+                if not open_status:
+                    error = True
+                    return error
+            except Exception as e:
+                msg = f'Player {preferred_player} missing. '
+                echo(msg + "Try installing it" +
+                     " or use something different.")
+                error = True
             else:
                 pass
             finally:
-                return
+                return error
 
         if current_platform == 'Linux':
             self.open_player('xdg-open', playitems)
@@ -141,7 +145,12 @@ class Convertor:
         """
         commands = [cmd] + play_items
 
-        subprocess.check_call(commands)
+        try:
+            subprocess.check_call(commands)
+        except subprocess.CalledProcessError as er:
+            return False
+        else:
+            return True
 
     def abort_conversion(self, message=''):
         """
