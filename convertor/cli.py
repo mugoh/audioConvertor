@@ -11,7 +11,8 @@ from formats import Convertor
 
 @click.group(invoke_without_command=True)
 @click.pass_context
-@click.option('--verbose', '-v', help="Increase output verbosity level")
+@click.option('--verbose', '-v', is_flag=True,
+              help="Increase output verbosity level")
 def main(ctx, verbose):
     group_commands = ['convert', 'play']
     """
@@ -108,7 +109,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
 
 @main.command('play')
 @click.pass_context
-@click.option('playlist', '-p', required=True, type=click.Path(exists=True),
+@click.option('--playlist', '-p', required=True, type=click.Path(exists=True),
               help="Folder containing audio files to be played")
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
