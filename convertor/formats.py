@@ -8,7 +8,7 @@ import os
 import platform
 from click import echo, style
 
-from utils.file_types import require_ffmepg, check_is_video
+from convertor.utils.file_types import require_ffmepg, check_is_video
 
 
 class Convertor:
