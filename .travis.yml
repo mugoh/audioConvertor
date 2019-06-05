@@ -1,0 +1,16 @@
+language: python
+cache: pip
+python:
+- "3.6"
+sudo: true
+
+before_script:
+- pip install coverage
+- pip install coveralls
+- pip install click
+
+script:
+- coverage run --source=convertor/ -m pytest  && coverage report -m
+
+after_success:
+- coveralls

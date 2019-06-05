@@ -1,4 +1,4 @@
-# audioConvertor
+# audioConvertor  [![Build Status](https://travis-ci.org/hogum/audioConvertor.svg?branch=master)](https://travis-ci.org/hogum/audioConvertor)
 
 audioConvertor is a multifile media format convertor command line tool. It allows conversion of files to various media types, the most emphasised on, being from video to audio.
 The tool is guide detailed out on [this blog post](https://medium.com/@mugoh.ks/python-click-building-your-first-command-line-interface-application-6947d5319ef7)
