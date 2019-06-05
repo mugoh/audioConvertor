@@ -28,6 +28,8 @@ class Convertor:
             _out = '' if _out == '.' else _out + '/'
             _out += self.get_name_from_path(_in,
                                             replace=True) + '.' + file_format
+            _out = _out.replace('//', '/')
+        self.out = _out
 
         # File format unchecked for single inputs
         if not check_is_video(_in):
@@ -96,6 +98,12 @@ class Convertor:
         """
 
         return "Converting"
+
+    def get_file_save_path(self):
+        """
+            Gives the location of converted files
+        """
+        return self.out
 
     def convert_multiple(self, video_files, out, brate, _format):
         """
