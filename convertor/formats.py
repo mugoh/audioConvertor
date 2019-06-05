@@ -158,7 +158,7 @@ class Convertor:
         """
         exit_message = ' Aborted'
         message += exit_message
-        echo('\n' + message, fg='red', err=True)
+        echo(style('\n' + message, fg='red'))
 
         os.abort()
 

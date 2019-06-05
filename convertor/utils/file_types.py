@@ -46,6 +46,6 @@ def get_module(module):
     click.echo("\nGetting ffmpeg")
 
     try:
-        subprocess.check_output(['apt-get', 'install', module])
+        subprocess.check_call(['sudo', 'apt-get', 'install', module])
     except subprocess.CalledProcessError as e:
         print("Could not get ", module, '\n', e)
