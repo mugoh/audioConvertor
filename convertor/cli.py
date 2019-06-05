@@ -9,7 +9,7 @@ import os
 from convertor.formats import Convertor
 
 
-@click.group(invoke_without_command=True)
+@click.group(invoke_without_command=True, chain=True)
 @click.pass_context
 @click.option('--verbose', '-v', is_flag=True,
               help="Increase output verbosity level")
@@ -51,6 +51,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
     """
         :   Convert video file input to audio.
     """
+
     user_input = convertor_instance.split_input_dirs(input_directory)
     for path in user_input:
         input_directory = path
@@ -59,6 +60,9 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
             click.echo("Input specified as file name")
             convertor_instance.to_audio(
                 input_directory, output, bitrate, file_format)
+
+            ctx.obj['PLAYLIST'] = convertor_instance.get_file_save_path()
+
         if not recursive and os.path.isdir(input_directory):
             click.echo(
                 input_directory +
@@ -103,6 +107,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
                                                     bitrate,
                                                     file_format
                                                     )
+                ctx.obj['PLAYLIST'] = convertor_instance.get_file_save_path()
 
             finally:
                 return
@@ -110,7 +115,7 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
 
 @main.command('play')
 @click.pass_context
-@click.option('--playlist', '-p', required=True, type=click.Path(exists=True),
+@click.option('--playlist', '-p', required=False, type=click.Path(exists=True),
               help="Folder containing audio files to be played")
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
@@ -121,6 +126,13 @@ def load_audio(ctx, playlist, recursive, player):
         :   Selects a track of audio files and loads them up
         in a music player.
     """
+
+    playlist = ctx.obj.get('PLAYLIST') if not playlist else playlist
+
+    if not playlist:
+        click.echo(click.style('Specify the file playlist location', fg='red'))
+        return
+
     if recursive:
         try:
             full_playlist = os.listdir(playlist)
