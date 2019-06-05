@@ -18,7 +18,8 @@ def main(ctx, verbose):
     """
             audioConvertor is a command line tool that helps convert video files
             to audio file formats.\n
-             example: audio3 convert -i input/file/path -o output/path
+             example: python convertor/cli.py -i input/file/path -o output/path
+
     """
     ctx.obj = {} if not ctx.obj else ctx.obj
 
@@ -110,8 +111,14 @@ def load_files(ctx, input_directory, output, bitrate, recursive, file_format):
 
 @main.command('play')
 @click.pass_context
-@click.option('--playlist', '-p', required=True, type=click.Path(exists=True),
-              help="Folder containing audio files to be played")
+@click.option(
+    '--playlist',
+    '-p',
+    multiple=True,
+    required=False,
+    type=click.Path(
+        exists=True),
+    help="Folder containing audio files to be played")
 @click.option('--recursive', '-r', is_flag=True,
               help="Load files from a directory")
 @click.option('--player', '-pl',
@@ -121,8 +128,15 @@ def load_audio(ctx, playlist, recursive, player):
         :   Selects a track of audio files and loads them up
         in a music player.
     """
+    playlist = ctx.obj.get('PLAYLIST') if not playlist else playlist
+
+    if not playlist:
+        click.echo(click.style('Specify the file playlist location', fg='red'))
+        return
+
     if recursive:
         try:
+
             full_playlist = os.listdir(playlist)
             full_playlist = [media for media in full_playlist
                              if convertor_instance.is_video(media)]
@@ -132,10 +146,8 @@ def load_audio(ctx, playlist, recursive, player):
         else:
             if not full_playlist:
                 click.echo("Could not find any media files in " + playlist)
-                return
             convertor_instance.load_player(
                 full_playlist, player)
-            pass
         finally:
             return
 
