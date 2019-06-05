@@ -6,7 +6,7 @@
 import click
 import os
 
-from formats import Convertor
+from convertor.formats import Convertor
 
 
 @click.group(invoke_without_command=True)
@@ -16,10 +16,11 @@ from formats import Convertor
 def main(ctx, verbose):
     group_commands = ['convert', 'play']
     """
-            audio3 is a command line tool that helps convert video files
+            audioConvertor is a command line tool that helps convert video files
             to audio file formats.\n
              example: audio3 convert -i input/file/path -o output/path
-        """
+    """
+    ctx.obj = {} if not ctx.obj else ctx.obj
 
     if ctx.invoked_subcommand is None:
         click.echo("Specify one of the commands below")
@@ -165,4 +166,4 @@ def flatten(iterable):
 convertor_instance = Convertor()
 
 if __name__ == '__main__':
-    main(obj={})
+    main()
