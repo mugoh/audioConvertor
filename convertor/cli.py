@@ -16,9 +16,9 @@ from convertor.formats import Convertor
 def main(ctx, verbose):
     group_commands = ['convert', 'play']
     """
-            audioConvertor is a command line tool that helps convert video files
-            to audio file formats.\n
-             example: python convertor/cli.py -i input/file/path -o output/path
+        audioConvertor is a command line tool that helps convert video files
+        to audio file formats.\n
+          example: python convertor/cli.py -i input/file/path -o output/path
 
     """
     ctx.obj = {} if not ctx.obj else ctx.obj
