@@ -1,2 +1,2 @@
 [run]
-omit = *examples*
+omit = *examples*, *utils*

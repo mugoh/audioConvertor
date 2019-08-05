@@ -16,9 +16,9 @@ from convertor.formats import Convertor
 def main(ctx, verbose):
     group_commands = ['convert', 'play']
     """
-            audioConvertor is a command line tool that helps convert video files
-            to audio file formats.\n
-             example: python convertor/cli.py -i input/file/path -o output/path
+        audioConvertor is a command line tool that helps convert video files
+        to audio file formats.\n
+          example: python convertor/cli.py -i input/file/path -o output/path
 
     """
     ctx.obj = {} if not ctx.obj else ctx.obj
@@ -134,6 +134,7 @@ def load_audio(ctx, playlist, recursive, player):
         click.echo(click.style('Specify the file playlist location', fg='red'))
         return
 
+    playlist = playlist[0] if not isinstance(playlist, str) else playlist
     if recursive:
         try:
 
@@ -152,6 +153,7 @@ def load_audio(ctx, playlist, recursive, player):
             return
 
     if not convertor_instance.is_video(playlist):
+        playlist = playlist[0] if not isinstance(playlist, str) else playlist
         click.echo(click.style(
             playlist + " is not a supported media type", fg='red'))
         return
@@ -176,6 +178,3 @@ def flatten(iterable):
 
 
 convertor_instance = Convertor()
-
-if __name__ == '__main__':
-    main()

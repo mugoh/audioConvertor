@@ -1,7 +1,7 @@
-# audioConvertor  [![Build Status](https://travis-ci.org/hogum/audioConvertor.svg?branch=master)](https://travis-ci.org/hogum/audioConvertor)
+# audioConvertor  [![Build Status](https://travis-ci.org/hogum/audioConvertor.svg?branch=master)](https://travis-ci.org/hogum/audioConvertor)  [![Coverage Status](https://coveralls.io/repos/github/hogum/audioConvertor/badge.svg?branch=master)](https://coveralls.io/github/hogum/audioConvertor?branch=master)
 
 audioConvertor is a multifile media format convertor command line tool. It allows conversion of files to various media types, the most emphasised on, being from video to audio.
-The tool is guide detailed out on [this blog post](https://medium.com/@mugoh.ks/python-click-building-your-first-command-line-interface-application-6947d5319ef7)
+The tool is a guide detailed out on [this blog post](https://medium.com/@mugoh.ks/python-click-building-your-first-command-line-interface-application-6947d5319ef7)
 
 ### Setup
 1. Access a cloned copy of the repo
@@ -19,6 +19,22 @@ The tool is guide detailed out on [this blog post](https://medium.com/@mugoh.ks/
 ```shell
     $ apt-get install ffmpeg
 ```
+
+### Dependecies
+
+1. Ensure to have pipenv installed
+```shell
+  $ apt install pipenv
+```
+2. Install the project dependencies by running
+```shell
+  $ pipenv install
+```
+- Alternatively, you can use a virtual environment with dependencies present by running
+```shell
+  $ pipenv shell
+```
+
 ### Interacting with the application
 
 #### Basic Usage
@@ -46,3 +62,14 @@ The usage options are accesible on the help menu. This can be displayed by runni
   ```
 
 
+### Testing
+1. Spawn a virtual environment
+
+```shell
+  $ pipenv shell
+```
+
+2. Run tests
+```shell
+  $ pytest
+```

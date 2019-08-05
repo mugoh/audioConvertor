@@ -1,8 +1,12 @@
 language: python
-cache: pip
+cache:
+    pip: true
 python:
 - "3.6"
 sudo: true
+
+before_install:
+  - sudo apt-get install -y ffmpeg
 
 before_script:
 - pip install coverage

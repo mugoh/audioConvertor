@@ -89,6 +89,11 @@ class Convertor:
         """
         video_extensions = ['mp4', 'flv', 'avi', 'mp3', 'flaac']
 
+        if not isinstance(given_file, str):
+            try:  # iter in play cmd
+                given_file = given_file[0]
+            except TypeError:
+                given_file = given_file
         return any([ext for ext in video_extensions
                     if given_file.endswith(ext)])
 
@@ -152,7 +157,6 @@ class Convertor:
             system architecture.
         """
         commands = [cmd] + play_items
-
         try:
             subprocess.check_call(commands)
         except subprocess.CalledProcessError as er:
