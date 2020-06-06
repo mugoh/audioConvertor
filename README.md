@@ -1,4 +1,4 @@
-# audioConvertor  [![Build Status](https://travis-ci.org/hogum/audioConvertor.svg?branch=master)](https://travis-ci.org/hogum/audioConvertor)  [![Coverage Status](https://coveralls.io/repos/github/hogum/audioConvertor/badge.svg?branch=master)](https://coveralls.io/github/hogum/audioConvertor?branch=master)
+# audioConvertor [![Build Status](https://travis-ci.org/mugoh/audioConvertor.svg?branch=master)](https://travis-ci.org/mugoh/audioConvertor)  [![Coverage Status](https://coveralls.io/repos/github/hogum/audioConvertor/badge.svg?branch=master)](https://coveralls.io/github/hogum/audioConvertor?branch=master)
 
 audioConvertor is a multifile media format convertor command line tool. It allows conversion of files to various media types, the most emphasised on, being from video to audio.
 The tool is a guide detailed out on [this blog post](https://medium.com/@mugoh.ks/python-click-building-your-first-command-line-interface-application-6947d5319ef7)
